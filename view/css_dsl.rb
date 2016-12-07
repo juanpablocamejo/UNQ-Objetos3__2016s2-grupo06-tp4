@@ -3,9 +3,7 @@ require_relative('../controller/builders')
 module CSS_DSL
 
     def export(css)
-      file_name = "#{$0.split('.')[0]}.css"
-      File.delete(file_name) if File.exist?(file_name)
-      File.write(file_name, css)
+      export_as "#{$0.split('.')[0]}.css", css
     end
 
     def export_as(name, css)

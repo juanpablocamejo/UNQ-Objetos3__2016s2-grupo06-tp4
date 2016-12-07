@@ -12,21 +12,19 @@ class SheetBuilder
     self.sheet = Sheet.new
     self.rules_builder = RulesBuilder.new
     self.selector_builder = SelectorBuilder.new
-    self.selector_builder.rules_builder = self.rules_builder
   end
 
-  def mixin(name,&bk)
+  def mixin(name, &bk)
     PropertiesBuilder.add_mixin(name, Proc.new(&bk))
   end
 
   def method_missing(name, *args, &bk)
     if name.to_s != 'let'
-    self.selector_builder.send(name, *args)
-    if block_given?
-      self.rules_builder.with_rule(self.selector_builder.build, &bk)
-      self.rules_builder
-    end
-    self
+      self.selector_builder.send(name, *args)
+      if block_given?
+        self.rules_builder.with_rule(self.selector_builder.build, &bk)
+      end
+      self
     end
   end
 
@@ -37,7 +35,7 @@ class SheetBuilder
 end
 
 class SelectorBuilder
-  attr_accessor :selector, :rules_builder
+  attr_accessor :selector
 
   def initialize
     self.selector = ''
@@ -118,11 +116,11 @@ class PropertiesBuilder
 
   def initialize
     self.properties = []
+    self.instance_eval('undef :display')
   end
 
   def method_missing(name, *args, &bk)
     if name == :with
-      self.instance_eval('undef :display')
       self.instance_eval(&PropertiesBuilder.get_mixin(args.first))
     elsif block_given?
       resolve_nested_property(name, &bk)

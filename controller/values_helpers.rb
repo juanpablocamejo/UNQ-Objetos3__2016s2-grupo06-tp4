@@ -24,12 +24,8 @@ module ValuesHelpers
   end
 
   def is_valid?(prop, val)
-    is_valid_type = false
     valid_types = CSS.properties[prop]
-    valid_types.each { |t|
-      if val.is_a? t then
-        is_valid_type=true; break;
-      end }
+    is_valid_type = valid_types.any? {|t| val.is_a? t}
     if is_valid_type && val.is_a?(ConstantValue)
       CSS.constants[prop].include? val.to_sym
     end

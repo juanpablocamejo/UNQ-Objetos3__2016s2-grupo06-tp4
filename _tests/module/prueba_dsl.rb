@@ -46,7 +46,7 @@ export_as 'test.css', css {
 
   # tag + clase + pseudoclase
 
-  li.clase4( :hover ){
+  li.clase4( :hover) {
     with :noDecoration
     color yellow
   }
